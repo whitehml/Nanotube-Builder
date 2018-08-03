@@ -9,9 +9,9 @@ class SWCNT(mb.Compound):
 """ A single-walled Carbon nantube recipe
 
 n,m : Chriality parameters
-length : length of nanotube in nm
+length : length of nanotube
 """
-    def __init__(self,n,m):
+    def __init__(self,n,m,length):
         super(SWCNT, self).__init__()
 
         class C(mb.Compound):
