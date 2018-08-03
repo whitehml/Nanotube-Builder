@@ -60,7 +60,7 @@ n,m : Chriality parameters
             prev = tube.children[-1]
             new_cell = mb.clone(unit_cell)
             if i % 2 == 1:
-                mb.rotate(new_cell, pi, around=np.asarray([0, 1, 0]))
+                new_cell.rotate(pi, around=np.asarray([0, 1, 0]))
                 new_cell.translate_to((0,0,prev.pos[2] + .213))
             else:
                 new_cell.translate((0,0,prev.pos[2] - .03))
