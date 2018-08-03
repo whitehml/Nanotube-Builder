@@ -51,3 +51,17 @@ n,m : Chriality parameters
             z = C.pos[1]
             
             C.translate_to((x,y,z))
+
+        tube = mb.Compound()
+        tube.add(unit_cell)
+
+        chain_length = int(length/.284)
+        for i in range(1,chain_length):
+            prev = tube.children[-1]
+            new_cell = mb.clone(unit_cell)
+            if i % 2 == 1:
+                mb.rotate(new_cell, pi, around=np.asarray([0, 1, 0]))
+                new_cell.translate_to((0,0,prev.pos[2] + .213))
+            else:
+                new_cell.translate((0,0,prev.pos[2] - .03))
+            tube.add(new_cell)
