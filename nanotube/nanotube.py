@@ -71,4 +71,6 @@ note: either the radius or the chiraity parameters must be defined but not both.
         # 
         # Armchair/zigzag unit cell -> full rows -> full sheets -> folded tubes 
         # -> insert C atoms
+        # 
+        # Afterwards take care of eccentricity factor for small tubes (< 14 C atoms per circle)
         
