@@ -1,7 +1,6 @@
 import mbuild as mb
 import numpy as np
 from copy import deepcopy
-from math import *
 
 __all__ = ['SWCNT']
 
@@ -88,9 +87,6 @@ class SWCNT(mb.Compound):
         #Finds number of rows in tube
         z = int(round((length-.071)/.213) + 1) # WIP
 
-
-        print(n)
-        print(z)
         #Propagate out to a row
         for i in range(0,n_cells):
             temp = deepcopy(_CHIRAL_UNIT[chirality])
@@ -103,22 +99,28 @@ class SWCNT(mb.Compound):
         for i in range(0,z): 
             temp =  deepcopy(_row)
             for Carbon in temp:
-                if chirality == 'zigzag' and i%2 == 0 and (Carbon[0] % _ZIG_WALK) < 0.01:
-                    Carbon[1] = Carbon[1] *-1
+                if chirality == 'zigzag' and i%2 == 0:
+                    Carbon[1] = Carbon[1]*-1 + .5*_CHIRAL_HEIGHT[chirality]*i
+                elif chirality == 'zigzag':
+                    Carbon[1] = Carbon[1] + .5*_CHIRAL_HEIGHT[chirality]*i - .071
                 Carbon[1] = Carbon[1] + _CHIRAL_HEIGHT[chirality]*i
                 
             _sheet.append(temp)
 
+        circumference = n_cells * _CHIRAL_LENGTH[chirality]
+        real_radius = circumference / (np.pi*2)
+
+        #Folding
         for row in _sheet:
             for Carbon in row:
+                theta = (Carbon[0]/circumference)*2*np.pi
+                x = np.cos(theta)*real_radius
+                y = np.sin(theta)*real_radius
+                Carbon = (x,y,Carbon[1])
                 atom = C(Carbon)
                 self.add(atom)
 
-        print(_sheet[0][1])
-        #nanotube.save("nanotube.mol2")
+        # Small tubes (< 14 C atoms per circle) have radii that are .98 to .99 times the size of what they should be
 
-        # -> folded tubes 
-        # -> insert C atoms
-        # 
-        # Afterwards take care of eccentricity factor for small tubes (< 14 C atoms per circle)
+        
         
