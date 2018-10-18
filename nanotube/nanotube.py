@@ -21,8 +21,6 @@ class SWCNT(mb.Compound):
     def __init__(self,length,radius=None,chirality="armchair",n=None,m=None):
         super(SWCNT, self).__init__()
 
-        nanotube = mb.Compound()
-
         # define repeatable row units for the different chiralities
         _ARMCHAIR = np.array([(0,0,0),
                     (.071,.071*np.sqrt(3),0),
@@ -46,9 +44,9 @@ class SWCNT(mb.Compound):
         # define Carbon atom
         class C(mb.Compound):
             def __init__(self,position):
-                super(C,self).__init__(pos=position)
+                super(C,self).__init__()
                 
-                self.add(mb.Particle(name='C'))
+                self.add(mb.Particle(name='C',pos=position))
 
         #Checking validity of input values
         if radius is None and n is None:
@@ -83,15 +81,18 @@ class SWCNT(mb.Compound):
         else:
             #Divides circumference of the desired nanotube by the space taken
             # up by one repeatable unit for specified chirality  
-            n_cells_aprx = nano_radius*(np.pi*2)/_CHIRAL_LENGTH[chirality]
+            n_cells_aprx = radius*(np.pi*2)/_CHIRAL_LENGTH[chirality]
 
             n_cells = int(round(n_cells_aprx))
 
         #Finds number of rows in tube
         z = int(round((length-.071)/.213) + 1) # WIP
 
+
+        print(n)
+        print(z)
         #Propagate out to a row
-        for i in range(0,n):
+        for i in range(0,n_cells):
             temp = deepcopy(_CHIRAL_UNIT[chirality])
             for Carbon in temp:
                 Carbon[0] = Carbon[0]+_CHIRAL_LENGTH[chirality]*i
@@ -111,9 +112,10 @@ class SWCNT(mb.Compound):
         for row in _sheet:
             for Carbon in row:
                 atom = C(Carbon)
-                nanotube.add(atom)
+                self.add(atom)
 
-        nanotube.save("nanotube.mol2")
+        print(_sheet[0][1])
+        #nanotube.save("nanotube.mol2")
 
         # -> folded tubes 
         # -> insert C atoms
