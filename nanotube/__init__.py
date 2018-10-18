@@ -1,1 +1,1 @@
-from nanotube.nanobuilder import SWCNT
+from nanotube.nanotube import SWCNT

@@ -7,5 +7,5 @@ setup(name='nanotube',
         author='Michael Whitehurst',
         author_email='michael.l.whitehurst@vanderbilt.edu',
         license='MIT',
-        packages=['nanotube-builder'],
+        packages=['nanotube'],
         zip_safe=False)
