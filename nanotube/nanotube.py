@@ -44,7 +44,7 @@ class SWCNT(mb.Compound):
         #Define Carbon atom
         class C(mb.Compound):
             def __init__(self,position):
-                super(C,self)s.__init__()
+                super(C,self).__init__()
                 
                 self.add(mb.Particle(name='C',pos=position))
 
