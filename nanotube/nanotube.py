@@ -1,5 +1,6 @@
 import mbuild as mb
 import numpy as np
+
 from copy import deepcopy
 
 __all__ = ['SWCNT']
@@ -40,10 +41,10 @@ class SWCNT(mb.Compound):
         _row = []
         _sheet = []
 
-        # define Carbon atom
+        #Define Carbon atom
         class C(mb.Compound):
             def __init__(self,position):
-                super(C,self).__init__()
+                super(C,self)s.__init__()
                 
                 self.add(mb.Particle(name='C',pos=position))
 
@@ -85,7 +86,7 @@ class SWCNT(mb.Compound):
             n_cells = int(round(n_cells_aprx))
 
         #Finds number of rows in tube
-        z = int(round((length-.071)/.213) + 1) # WIP
+        z = int(round((length-.071)/.213) + 1)
 
         #Propagate out to a row
         for i in range(0,n_cells):
@@ -121,6 +122,3 @@ class SWCNT(mb.Compound):
                 self.add(atom)
 
         # Small tubes (< 14 C atoms per circle) have radii that are .98 to .99 times the size of what they should be
-
-        
-        

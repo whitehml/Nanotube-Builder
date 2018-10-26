@@ -12,8 +12,7 @@ class BaseTest:
     def initdir(self, tmpdir):
         tmpdir.chdir()
 
-    # example to follow
-    # @pytest.fixture
-    # def GraphenePore(self):
-    #     from porebuilder.porebuilder import GraphenePore
-    #     return GraphenePore(pore_depth=3, side_dim=3, n_sheets=3, pore_width=1)
+    @pytest.fixture
+    def GraphenePore(self):
+        from nanotube.nanotube import SWCNT
+        return Nanotube(length=4,radius=.7)
