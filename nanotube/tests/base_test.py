@@ -13,6 +13,6 @@ class BaseTest:
         tmpdir.chdir()
 
     @pytest.fixture
-    def GraphenePore(self):
+    def Nanotube(self):
         from nanotube.nanotube import SWCNT
-        return Nanotube(length=4,radius=.7)
+        return SWCNT(length=4,radius=.7)

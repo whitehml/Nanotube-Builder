@@ -122,3 +122,8 @@ class SWCNT(mb.Compound):
                 self.add(atom)
 
         # Small tubes (< 14 C atoms per circle) have radii that are .98 to .99 times the size of what they should be
+
+class SWCNT_solvated(SWCNT):
+
+    def __init__(self,solv):
+        super(SWCNT_solvated, self).__init__(length=length,r)
