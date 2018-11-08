@@ -142,8 +142,7 @@ class SWCNT_solvated(SWCNT):
     def __init__(self,length=3,radius=None,chirality="armchair",n=None,m=None,solv=None,density=None,superPacked=False):
         super(SWCNT_solvated, self).__init__(length=length,radius=radius,chirality=chirality,n=n,m=m)
 
-        #water example density of .42 for radius of 1.5 nm
-
+        #Quick method packs molecules into smaller box but with a higher density
         if superPacked:
             minimums = (real_radius*np.cos(.75*np.pi),real_radius*np.cos(.25*np.pi),0)
             maximums = (real_radius*np.cos(.25*np.pi),real_radius*np.cos(.75*np.pi),length)
@@ -151,6 +150,8 @@ class SWCNT_solvated(SWCNT):
 
             mb.fill_box(self,box=box,density=density*(np.pi/2))
 
+        #Slow method carves out cyilnder of molecules from box of proper
+        #density molecules silghtly larger than the nanotube
         else:
             s = mb.Compound()
 
@@ -162,3 +163,16 @@ class SWCNT_solvated(SWCNT):
                 if child.pos[0] < real_radius - .1 and child.pos[1] < real_radius - .1:
                     self.add(mb.clone(child))
             del s
+
+class CNT_forest(mb.Compound):
+    """ A forest of Carbon Nanotubes
+    tube: mb.Compound or list of mb.Compounds, tube(s) to be placed in forest
+    dimensions: tuple or list like of size 2 containing x,y dimensions
+    spacing: float in nm for minimum distance between tubes
+    """
+      def __init__(self,tube,dimensions,spacing):
+        super(CNT_forest, self).__init__()
+
+        tube = None
+        dimensions = None
+        spacing = None
