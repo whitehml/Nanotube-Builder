@@ -3,7 +3,7 @@ import numpy as np
 
 from copy import deepcopy
 
-__all__ = ['SWCNT']
+__all__ = ['SWCNT','SWCNT_solvated','CNT_forest']
 
 class SWCNT(mb.Compound):
     """ A single-walled Carbon nanotube recipe
@@ -16,7 +16,7 @@ class SWCNT(mb.Compound):
     note: either the radius or the chirality parameters must be defined but not
     both.
     """
-
+    r = None
     def __init__(self,length,radius=None,chirality="armchair",n=None,m=None):
         super(SWCNT, self).__init__()
 
@@ -124,8 +124,13 @@ class SWCNT(mb.Compound):
                 atom = C(Carbon)
                 self.add(atom)
 
+        self.r = real_radius
+
+    def get_radius(self):
+        return self.r
+
 class SWCNT_solvated(SWCNT):
-     """ A solvated single-walled Carbon nanotube recipe
+    """ A solvated single-walled Carbon nanotube recipe
     radius: radius of nanotube in nm
     chirality : If using radius instead of n and m, the type of chirality desired
         either "armchair" or "zigzag". "armchair" by defualt
@@ -138,26 +143,26 @@ class SWCNT_solvated(SWCNT):
     note: either the radius or the chirality parameters must be defined but not
     both.
     """
-
-    def __init__(self,length=3,radius=None,chirality="armchair",n=None,m=None,solv=None,density=None,superPacked=False):
-        super(SWCNT_solvated, self).__init__(length=length,radius=radius,chirality=chirality,n=n,m=m)
+    def __init__(self,solv,n_solvent,length=3,radius=None,chirality="armchair",n=None, m=None,superPacked=False):
+        super(SWCNT_solvated, self).__init__(length,radius=radius,chirality=chirality,n=n,m=m)
 
         #Quick method packs molecules into smaller box but with a higher density
         if superPacked:
-            minimums = (real_radius*np.cos(.75*np.pi),real_radius*np.cos(.25*np.pi),0)
-            maximums = (real_radius*np.cos(.25*np.pi),real_radius*np.cos(.75*np.pi),length)
+            minimums = (self.r*np.cos(.75*np.pi),self.r*np.cos(.25*np.pi),0)
+            maximums = (self.r*np.cos(.25*np.pi),self.r*np.cos(.75*np.pi),length)
             box = mb.Box(mins=minimums,maxs=maximums)
 
-            mb.fill_box(self,box=box,density=density*(np.pi/2))
+            mb.solvate(self,solv,n_solvent,box=box)
 
         #Slow method carves out cyilnder of molecules from box of proper
         #density molecules silghtly larger than the nanotube
         else:
             s = mb.Compound()
 
-            box = mb.Box(mins=(-real_radius,-real_radius,0),maxs=(real_radius,real_radius,length))
+            box = mb.Box(mins=(-self.r,-self.r,0),maxs=(self.r,self.r,length))
+            print(box)
 
-            mb.fill_box(s,box=box,density=density)
+            s = mb.solvate(s,solv,n_solvent,box=box)
 
             for child in s:
                 if child.pos[0] < real_radius - .1 and child.pos[1] < real_radius - .1:
@@ -170,7 +175,7 @@ class CNT_forest(mb.Compound):
     dimensions: tuple or list like of size 2 containing x,y dimensions
     spacing: float in nm for minimum distance between tubes
     """
-      def __init__(self,tube,dimensions,spacing):
+    def __init__(self,tube,dimensions,spacing):
         super(CNT_forest, self).__init__()
 
         tube = None
