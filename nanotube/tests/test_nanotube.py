@@ -17,5 +17,5 @@ class TestNanoTubeBuilder(BaseTest):
             assert(C.pos[2] >= 0)
             assert(C.pos[2] <= 4)
             radius = np.sqrt(C.pos[0]*C.pos[0]+C.pos[1]*C.pos[1])
-            assert(radius <= .72)
-            assert(radius >= .68)
+            assert(radius <= .73)
+            assert(radius >= .67)
