@@ -157,16 +157,18 @@ class SWCNT_solvated(SWCNT):
         #Slow method carves out cyilnder of molecules from box of proper
         #density molecules silghtly larger than the nanotube
         else:
-            s = mb.Compound()
+
+            s = mb.Compound(name="Temp")
 
             box = mb.Box(mins=(-self.r,-self.r,0),maxs=(self.r,self.r,length))
             print(box)
 
-            s = mb.solvate(s,solv,n_solvent,box=box)
+            s = mb.solvate(s,solv,n_solvent,box)
 
             for child in s:
-                if child.pos[0] < real_radius - .1 and child.pos[1] < real_radius - .1:
+                if child.pos[0] < self.r - .1 and child.pos[1] < self.r - .1 and child.name != "Temp":
                     self.add(mb.clone(child))
+
             del s
 
 class CNT_forest(mb.Compound):
